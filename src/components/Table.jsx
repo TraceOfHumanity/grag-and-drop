@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { folders, files } from "src/utils/data";
+import ReactDOM from "react-dom";
 
 export const Table = () => {
   const [allFolders, setAllFolders] = useState(folders);
   const [allFiles, setAllFiles] = useState(files);
+  const [draggingFileId, setDraggingFileId] = useState(null);
   const [fileInFolder, setFileInFolder] = useState(
     allFolders.reduce((acc, folder) => {
       return [...acc, ...folder.filesId];
@@ -15,6 +17,28 @@ export const Table = () => {
 
   const handleDragStart = (e, id) => {
     e.dataTransfer.setData("id", id);
+    setDraggingFileId(id);
+
+    // Створюємо кастомне зображення перетягування
+    const dragImg = document.createElement("div");
+    dragImg.style.width = "fit-content";
+    document.body.appendChild(dragImg);
+
+    ReactDOM.render(
+      <DragImg name={allFiles.find((file) => file.id === id).name} />,
+      dragImg,
+    );
+
+    document.body.appendChild(dragImg);
+
+    e.dataTransfer.setDragImage(dragImg, -10, -10);
+
+    // Видаляємо зображення перетягування після того, як воно було встановлено
+    setTimeout(() => document.body.removeChild(dragImg), 0);
+  };
+
+  const handleDragEnd = () => {
+    setDraggingFileId(null);
   };
 
   const handleDragOver = (e) => {
@@ -23,7 +47,7 @@ export const Table = () => {
 
   const handleDrop = (e, folder) => {
     e.preventDefault();
-    const id = e.dataTransfer.getData("id");
+    const id = parseInt(e.dataTransfer.getData("id"), 10);
 
     const newFolders = allFolders.map((f) => {
       if (f.id === folder.id) {
@@ -43,7 +67,7 @@ export const Table = () => {
   console.log("allFolders", allFolders);
 
   return (
-    <div className="rounded-lg border border-gray-500 bg-white ">
+    <div className="overflow-hidden rounded-lg border border-gray-500 bg-white">
       {allFolders.map((folder) => (
         <div
           className=" border-b border-gray-800 px-2 py-1"
@@ -56,14 +80,20 @@ export const Table = () => {
       ))}
       {filesNotInFolders.map((file) => (
         <div
-          className="border-b border-gray-800 px-2 py-1 last:border-none"
+          className={`flex items-center justify-between gap-2 border-b border-gray-800 px-2 py-1 last:border-none ${draggingFileId === file.id ? "opacity-20" : ""}`}
           key={file.id}
           draggable
           onDragStart={(e) => handleDragStart(e, file.id)}
+          onDragEnd={() => handleDragEnd()}
         >
-          {file.name}
+          <p>{file.name}</p>
+          <p>{file.size / 1024 / 1024} MB</p>
         </div>
       ))}
     </div>
   );
+};
+
+const DragImg = ({ name }) => {
+  return <div className="scale-150 bg-green-500">{name}</div>;
 };

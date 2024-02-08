@@ -3,6 +3,7 @@ export const folders = [
     id: 1000,
     name: "Folder 1",
     filesId: [1, 2, 3],
+
     type: "folder",
   },
   {
