@@ -1,16 +1,10 @@
-import React from 'react';
+import React from "react";
+import { Table } from "./components/Table";
 
 function App() {
   return (
-    <div style={{ textAlign: 'center' }}>
-      <header>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+    <div className=" flex h-screen w-screen items-center justify-center bg-slate-300 p-2 ">
+      <Table />
     </div>
   );
 }
