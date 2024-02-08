@@ -19,7 +19,6 @@ export const Table = () => {
     e.dataTransfer.setData("id", id);
     setDraggingFileId(id);
 
-    // Створюємо кастомне зображення перетягування
     const dragImg = document.createElement("div");
     dragImg.id = "dragImg";
     dragImg.style.width = "fit-content";
@@ -39,7 +38,6 @@ export const Table = () => {
 
     e.dataTransfer.setDragImage(dragImg, -10, -10);
 
-    // Видаляємо зображення перетягування після того, як воно було встановлено
     setTimeout(() => document.body.removeChild(dragImg), 0);
   };
 
@@ -69,8 +67,6 @@ export const Table = () => {
     );
     setFilesNotInFolders(newFilesNotInFolders);
   };
-
-  console.log("allFolders", allFolders);
 
   return (
     <div className="overflow-hidden rounded-lg border border-gray-500 bg-white">
