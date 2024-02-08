@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { folders, files } from "src/utils/data";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 export const Table = () => {
   const [allFolders, setAllFolders] = useState(folders);
@@ -21,13 +21,19 @@ export const Table = () => {
 
     // Створюємо кастомне зображення перетягування
     const dragImg = document.createElement("div");
+    dragImg.id = "dragImg";
     dragImg.style.width = "fit-content";
     document.body.appendChild(dragImg);
 
-    ReactDOM.render(
+    const dragImgComponent = createRoot(document.getElementById("dragImg"));
+    dragImgComponent.render(
       <DragImg name={allFiles.find((file) => file.id === id).name} />,
-      dragImg,
     );
+
+    // ReactDOM.render(
+    //   <DragImg name={allFiles.find((file) => file.id === id).name} />,
+    //   dragImg,
+    // );
 
     document.body.appendChild(dragImg);
 
